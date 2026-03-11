@@ -149,6 +149,12 @@ function partyMeta(party) {
   };
 }
 
+function seatGridColumns(partyCount, mobile = false) {
+  const rowHead = mobile ? "minmax(70px, 0.95fr)" : "180px";
+  const partyColumn = mobile ? "minmax(0, 1fr)" : "minmax(120px, 1fr)";
+  return `${rowHead} ${Array.from({ length: partyCount }, () => partyColumn).join(" ")}`;
+}
+
 function computeAllocation(parties, totalVotes, seatCount, thresholdPercent) {
   const thresholdVotes = totalVotes * (thresholdPercent / 100);
   const minimumQualifyingVotes = minimumVotesToQualify(thresholdVotes);
@@ -322,35 +328,40 @@ function renderAllocation(model) {
       </div>
       ${model.rounds.map((round) => {
         const winnerMeta = partyMeta(round.party);
+        const columnCount = round.snapshot.length + 1;
+        const desktopColumns = seatGridColumns(round.snapshot.length);
+        const mobileColumns = seatGridColumns(round.snapshot.length, true);
         const gridHeader = round.snapshot.map((entry) => {
           const meta = partyMeta(entry.party);
+          const isLastPartyColumn = round.snapshot[round.snapshot.length - 1].party === entry.party;
           return `
-            <div class="seat-grid-cell party-head ${meta.textClass || ""}" style="background:${meta.color}; color:${meta.textClass ? "var(--ink)" : "#fff"};">
+            <div class="seat-grid-cell party-head ${meta.textClass || ""}" style="background:${meta.color}; color:${meta.textClass ? "var(--ink)" : "#fff"}; ${isLastPartyColumn ? "border-right:0;" : ""}">
               <span>${meta.emoji}</span>
               <span class="party-name-short">${escapeHtml(meta.shortName)}</span>
             </div>
           `;
         }).join("");
 
-        const divisorRow = round.snapshot.map((entry) => `
-          <div class="seat-grid-cell mono">÷ ${entry.divisor}</div>
+        const divisorRow = round.snapshot.map((entry, index) => `
+          <div class="seat-grid-cell mono" style="${index === round.snapshot.length - 1 ? "border-right:0;" : ""}">÷ ${entry.divisor}</div>
         `).join("");
 
         const quotientRow = round.snapshot.map((entry) => {
           const previousText = entry.divisor > 1 ? `<span class="quotient-secondary mono">${formatNumber(entry.votes)}</span>` : "";
           const isWinner = entry.party === round.party;
+          const isLastPartyColumn = round.snapshot[round.snapshot.length - 1].party === entry.party;
           return `
-            <div class="seat-grid-cell quotient-cell ${isWinner ? "winner" : ""}" style="color:${isWinner ? winnerMeta.color : "inherit"};">
+            <div class="seat-grid-cell quotient-cell ${isWinner ? "winner" : ""}" style="color:${isWinner ? winnerMeta.color : "inherit"}; ${isLastPartyColumn ? "border-right:0;" : ""}">
               ${previousText}
               <span class="quotient-primary mono">${formatNumber(entry.quotient, 2)}</span>
             </div>
           `;
         }).join("");
 
-        const nextDivisorRow = round.snapshot.map((entry) => {
+        const nextDivisorRow = round.snapshot.map((entry, index) => {
           const nextDivisor = entry.party === round.party ? entry.divisor + 2 : entry.divisor;
           return `
-            <div class="seat-grid-cell mono bottom-row">÷ ${nextDivisor}</div>
+            <div class="seat-grid-cell mono bottom-row" style="${index === round.snapshot.length - 1 ? "border-right:0;" : ""}">÷ ${nextDivisor}</div>
           `;
         }).join("");
 
@@ -378,7 +389,7 @@ function renderAllocation(model) {
                 ${winnerMeta.emoji} Seat ${round.seat} goes to ${escapeHtml(round.party)} because ${formatNumber(round.votes)} / ${round.divisor} = ${formatNumber(round.quotient, 2)}.
               </span>
               <div class="seat-grid-wrap">
-                <div class="seat-grid">
+                <div class="seat-grid" style="--seat-grid-columns:${desktopColumns}; --seat-grid-columns-mobile:${mobileColumns};">
                   <div class="seat-grid-cell row-head">Party</div>
                   ${gridHeader}
                   <div class="seat-grid-cell row-head">Current divisor</div>

@@ -460,7 +460,7 @@ details summary::-webkit-details-marker {
 
 .seat-grid {
   display: grid;
-  grid-template-columns: 180px repeat(6, minmax(120px, 1fr));
+  grid-template-columns: var(--seat-grid-columns, 180px repeat(6, minmax(120px, 1fr)));
   border: 1px solid var(--line);
   border-radius: 14px;
   overflow: hidden;
@@ -477,10 +477,6 @@ details summary::-webkit-details-marker {
   justify-content: center;
   text-align: center;
   background: rgba(255, 255, 255, 0.5);
-}
-
-.seat-grid-cell:nth-child(7n) {
-  border-right: 0;
 }
 
 .seat-grid-cell.bottom-row {
@@ -728,7 +724,7 @@ details summary::-webkit-details-marker {
   .seat-grid {
     min-width: 0;
     width: 100%;
-    grid-template-columns: minmax(70px, 0.95fr) repeat(6, minmax(0, 1fr));
+    grid-template-columns: var(--seat-grid-columns-mobile, minmax(70px, 0.95fr) repeat(6, minmax(0, 1fr)));
   }
 
   .seat-grid-cell {

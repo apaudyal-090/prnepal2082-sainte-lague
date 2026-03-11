@@ -26,6 +26,37 @@ body {
     linear-gradient(180deg, #fcfaf5 0%, var(--bg) 100%);
 }
 
+body.lock-landscape {
+  overflow: hidden;
+}
+
+.orientation-guard {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(23, 31, 41, 0.86);
+  backdrop-filter: blur(10px);
+}
+
+.orientation-card {
+  width: min(420px, 100%);
+  padding: 24px;
+  border-radius: 20px;
+  background: var(--paper-strong);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.orientation-copy {
+  margin: 14px 0 0;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
 .page-shell {
   width: min(1120px, calc(100vw - 32px));
   margin: 0 auto;
@@ -659,16 +690,32 @@ details summary::-webkit-details-marker {
   }
 
   .seat-grid {
-    min-width: 760px;
+    min-width: 0;
+    width: 100%;
+    grid-template-columns: minmax(70px, 0.95fr) repeat(6, minmax(0, 1fr));
   }
 
   .seat-grid-cell {
-    min-height: 72px;
-    padding: 10px 8px;
+    min-height: 60px;
+    padding: 8px 4px;
+    font-size: 0.74rem;
   }
 
   .party-name-short {
-    font-size: 0.76rem;
+    font-size: 0.64rem;
+    word-break: break-word;
+  }
+
+  .seat-grid-cell.row-head {
+    font-size: 0.82rem;
+  }
+
+  .quotient-primary {
+    font-size: 0.78rem;
+  }
+
+  .quotient-secondary {
+    font-size: 0.68rem;
   }
 
   .seat-tray {
@@ -695,5 +742,11 @@ details summary::-webkit-details-marker {
   th,
   td {
     padding: 10px 8px;
+  }
+}
+
+@media (max-width: 720px) and (orientation: portrait) {
+  .orientation-guard {
+    display: flex;
   }
 }

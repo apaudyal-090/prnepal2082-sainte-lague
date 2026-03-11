@@ -387,6 +387,30 @@ function readInputs() {
   };
 }
 
+function isMobileViewport() {
+  return typeof window !== "undefined" && window.matchMedia("(max-width: 720px)").matches;
+}
+
+function syncOrientationGuard() {
+  const guard = document.getElementById("orientation-guard");
+  if (!guard || typeof window === "undefined") return;
+
+  const showGuard = isMobileViewport() && window.matchMedia("(orientation: portrait)").matches;
+  guard.hidden = !showGuard;
+  document.body.classList.toggle("lock-landscape", showGuard);
+}
+
+async function tryLockLandscape() {
+  if (typeof window === "undefined" || !isMobileViewport()) return;
+  if (!window.screen?.orientation?.lock) return;
+
+  try {
+    await window.screen.orientation.lock("landscape");
+  } catch {
+    // Browsers commonly reject orientation lock outside fullscreen/PWA mode.
+  }
+}
+
 function initApp() {
   const inputs = ["seat-count", "threshold-percent"];
 
@@ -399,6 +423,11 @@ function initApp() {
   for (const id of inputs) {
     document.getElementById(id).addEventListener("input", rerender);
   }
+
+  syncOrientationGuard();
+  window.addEventListener("resize", syncOrientationGuard);
+  window.addEventListener("orientationchange", syncOrientationGuard);
+  tryLockLandscape();
 
   rerender();
 }

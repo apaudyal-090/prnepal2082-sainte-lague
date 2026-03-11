@@ -36,6 +36,13 @@ body {
   margin-bottom: 24px;
 }
 
+.byline {
+  margin: 10px 0 0;
+  font-size: 0.98rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
 .eyebrow {
   margin: 0 0 8px;
   font-size: 0.78rem;
@@ -375,6 +382,7 @@ details summary::-webkit-details-marker {
   color: var(--muted);
   font-size: 0.92rem;
   text-align: right;
+  line-height: 1.4;
 }
 
 .seat-step-body {
@@ -550,5 +558,142 @@ details summary::-webkit-details-marker {
 
   .method-poster-header {
     text-align: left;
+  }
+}
+
+@media (max-width: 720px) {
+  body {
+    background:
+      radial-gradient(circle at top left, rgba(217, 119, 6, 0.14), transparent 32%),
+      radial-gradient(circle at top right, rgba(15, 118, 110, 0.14), transparent 30%),
+      linear-gradient(180deg, #fcfaf5 0%, var(--bg) 100%);
+  }
+
+  .page-shell {
+    width: min(100vw, calc(100vw - 16px));
+    padding: 20px 0 32px;
+  }
+
+  .hero {
+    margin-bottom: 18px;
+  }
+
+  h1 {
+    max-width: none;
+    font-size: clamp(1.8rem, 8vw, 2.6rem);
+  }
+
+  .hero-copy,
+  .byline {
+    max-width: none;
+  }
+
+  .card {
+    border-radius: 16px;
+  }
+
+  .controls,
+  .summary-grid {
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .controls,
+  .metric,
+  .table-wrap,
+  .details-stack,
+  .substep-body,
+  .seat-step-body {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .section-heading {
+    padding: 16px 14px 0;
+  }
+
+  details summary {
+    padding: 16px 14px;
+    font-size: 1.1rem;
+  }
+
+  .substep-card summary,
+  .seat-step summary {
+    padding: 14px;
+  }
+
+  .method-poster {
+    margin: 14px 0 16px;
+    border-radius: 14px;
+    background-size: 22px 22px;
+  }
+
+  .method-poster-header {
+    padding: 18px 14px 14px;
+  }
+
+  .poster-step {
+    padding: 14px;
+  }
+
+  .poster-step h4 {
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+
+  .poster-step ul {
+    padding-left: 18px;
+    gap: 8px;
+  }
+
+  .seat-step-meta {
+    width: 100%;
+    text-align: left;
+    font-size: 0.88rem;
+  }
+
+  .winner-note {
+    width: 100%;
+    border-radius: 14px;
+    line-height: 1.4;
+  }
+
+  .seat-grid {
+    min-width: 760px;
+  }
+
+  .seat-grid-cell {
+    min-height: 72px;
+    padding: 10px 8px;
+  }
+
+  .party-name-short {
+    font-size: 0.76rem;
+  }
+
+  .seat-tray {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .seat-token {
+    min-height: 38px;
+    font-size: 0.78rem;
+    padding: 6px;
+  }
+
+  .legend-row {
+    gap: 8px;
+  }
+
+  .legend-item {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  th,
+  td {
+    padding: 10px 8px;
   }
 }

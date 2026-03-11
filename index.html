@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nepal PR Seat Allocator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="page-shell">
+    <section class="hero">
+      <p class="eyebrow">Nepal Proportional Representation</p>
+      <h1>Sainte-Lague Seat Allocator</h1>
+      <p class="hero-copy">
+        This page applies the 3% threshold first, removes ineligible parties, and then distributes
+        the 110 PR seats with Sainte-Lague divisors. Expand the calculation section to inspect each
+        awarded seat.
+      </p>
+    </section>
+
+    <section class="controls card" aria-label="Allocation controls">
+      <div class="control-group">
+        <label for="seat-count">Total seats</label>
+        <input id="seat-count" type="number" min="1" max="500" step="1" value="110">
+      </div>
+      <div class="control-group">
+        <label for="threshold-percent">Threshold (%)</label>
+        <input id="threshold-percent" type="number" min="0" max="100" step="0.1" value="3">
+      </div>
+      <div class="control-group method-copy">
+        <span>Method</span>
+        <p>Standard Sainte-Lague divisors: 1, 3, 5, 7, 9...</p>
+      </div>
+    </section>
+
+    <section class="summary-grid" aria-label="Summary">
+      <article class="metric card">
+        <p class="metric-label">Total votes</p>
+        <p id="total-votes" class="metric-value">-</p>
+      </article>
+      <article class="metric card">
+        <p class="metric-label">3% cutoff</p>
+        <p id="threshold-votes" class="metric-value">-</p>
+      </article>
+      <article class="metric card">
+        <p class="metric-label">Qualifying parties</p>
+        <p id="qualifying-count" class="metric-value">-</p>
+      </article>
+      <article class="metric card">
+        <p class="metric-label">Votes kept after cutoff</p>
+        <p id="eligible-votes" class="metric-value">-</p>
+      </article>
+    </section>
+
+    <section class="card">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Result</p>
+          <h2>Seat allocation</h2>
+        </div>
+        <p id="result-note" class="section-note"></p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Party</th>
+              <th>Votes</th>
+              <th>Seat share</th>
+              <th>Seats</th>
+            </tr>
+          </thead>
+          <tbody id="allocation-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <details class="card" open>
+      <summary>Step-by-step calculation</summary>
+      <div class="details-stack">
+        <details class="substep-card" open>
+          <summary>Step 1: Apply the threshold</summary>
+          <div class="substep-body">
+            <p id="threshold-explainer" class="explanation"></p>
+            <div class="two-column">
+              <div>
+                <h4>Eligible parties</h4>
+                <ul id="eligible-list" class="party-list"></ul>
+              </div>
+              <div>
+                <h4>Excluded parties</h4>
+                <ul id="excluded-list" class="party-list"></ul>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details class="substep-card" open>
+          <summary>Step 2: Award seats with Sainte-Lague quotients</summary>
+          <div class="substep-body">
+            <p class="explanation">
+              Each seat is awarded sequentially. Open any seat below to see the current divisor for all six
+              eligible parties, the active quotients, the highlighted winner, and the running seat tray.
+            </p>
+            <section class="method-poster" aria-label="Sainte-Lague method overview">
+              <header class="method-poster-header">
+                <h3>The Sainte-Lague Method: How Seats Are Allocated Proportionately</h3>
+              </header>
+              <div class="method-poster-steps">
+                <article class="poster-step poster-step-divide">
+                  <h4>Step 1: Divide (Calculate Quotients)</h4>
+                  <ul>
+                    <li>Start with the total votes received by each party.</li>
+                    <li>Divide each party’s vote total by odd numbers starting from 1.</li>
+                    <li>This creates a series of quotients for every party.</li>
+                  </ul>
+                  <p class="poster-example">Example: 5,167,429 ÷ 1 = 5,167,429, then ÷ 3 = 1,722,476, then ÷ 5 = 1,033,486.</p>
+                </article>
+                <article class="poster-step poster-step-award">
+                  <h4>Step 2: Award (Assign Seats)</h4>
+                  <ul>
+                    <li>Compare the quotients from all eligible parties.</li>
+                    <li>Identify the highest active quotient.</li>
+                    <li>The party with the highest quotient wins the next seat.</li>
+                  </ul>
+                  <p class="poster-example">Seat 1 goes to the highest quotient, seat 2 to the next highest, and so on until all 110 seats are assigned.</p>
+                </article>
+                <article class="poster-step poster-step-compress">
+                  <h4>Step 3: Compress (Update the Divisor)</h4>
+                  <ul>
+                    <li>After a party wins, move its divisor to the next odd number.</li>
+                    <li>Its next quotient becomes smaller.</li>
+                    <li>This gives other parties a chance in the following round.</li>
+                  </ul>
+                  <p class="poster-example">After winning at ÷ 1, the next quotient is calculated at ÷ 3.</p>
+                </article>
+              </div>
+            </section>
+            <div id="seat-details" class="seat-details"></div>
+          </div>
+        </details>
+      </div>
+    </details>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

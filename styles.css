@@ -74,6 +74,12 @@ body.lock-landscape {
   font-weight: 600;
 }
 
+.sub-byline {
+  margin: 6px 0 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
 .eyebrow {
   margin: 0 0 8px;
   font-size: 0.78rem;

@@ -37,7 +37,19 @@
       </div>
       <div class="control-group">
         <label for="threshold-percent">Threshold (%)</label>
-        <input id="threshold-percent" type="number" min="0" max="100" step="0.1" value="3">
+        <div class="stepper-input">
+          <button id="threshold-decrement" type="button" class="stepper-btn" aria-label="Decrease threshold">-</button>
+          <input
+            id="threshold-percent"
+            type="text"
+            inputmode="decimal"
+            autocomplete="off"
+            spellcheck="false"
+            aria-label="Threshold percent"
+            value="3"
+          >
+          <button id="threshold-increment" type="button" class="stepper-btn" aria-label="Increase threshold">+</button>
+        </div>
       </div>
       <div class="control-group method-copy">
         <span>Method</span>

@@ -105,6 +105,23 @@ function formatPercentLabel(value) {
   return Number.isInteger(value) ? String(value) : String(value);
 }
 
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
+function parseThresholdValue(rawValue) {
+  const normalized = String(rawValue).replace(/[^0-9.]/g, "");
+  const parsed = Number(normalized);
+  return Number.isFinite(parsed) ? clamp(parsed, 0, 100) : 3;
+}
+
+function normalizeThresholdInput() {
+  const thresholdInput = document.getElementById("threshold-percent");
+  const numericValue = parseThresholdValue(thresholdInput.value);
+  thresholdInput.value = formatPercentLabel(numericValue);
+  return numericValue;
+}
+
 function minimumVotesToQualify(thresholdVotes) {
   return Number.isInteger(thresholdVotes) ? thresholdVotes : Math.floor(thresholdVotes) + 1;
 }
@@ -385,7 +402,7 @@ function renderAllocation(model) {
 
 function readInputs() {
   const seatCount = Number(document.getElementById("seat-count").value);
-  const thresholdPercent = Number(document.getElementById("threshold-percent").value);
+  const thresholdPercent = parseThresholdValue(document.getElementById("threshold-percent").value);
 
   return {
     seatCount: Number.isFinite(seatCount) && seatCount > 0 ? Math.floor(seatCount) : 110,
@@ -420,6 +437,9 @@ async function tryLockLandscape() {
 
 function initApp() {
   const inputs = ["seat-count", "threshold-percent"];
+  const thresholdInput = document.getElementById("threshold-percent");
+  const thresholdDecrementBtn = document.getElementById("threshold-decrement");
+  const thresholdIncrementBtn = document.getElementById("threshold-increment");
 
   const rerender = () => {
     const { seatCount, thresholdPercent } = readInputs();
@@ -431,11 +451,29 @@ function initApp() {
     document.getElementById(id).addEventListener("input", rerender);
   }
 
+  thresholdInput.addEventListener("blur", () => {
+    normalizeThresholdInput();
+    rerender();
+  });
+
+  thresholdIncrementBtn.addEventListener("click", () => {
+    const nextValue = clamp(parseThresholdValue(thresholdInput.value) + 0.1, 0, 100);
+    thresholdInput.value = formatPercentLabel(Number(nextValue.toFixed(1)));
+    rerender();
+  });
+
+  thresholdDecrementBtn.addEventListener("click", () => {
+    const nextValue = clamp(parseThresholdValue(thresholdInput.value) - 0.1, 0, 100);
+    thresholdInput.value = formatPercentLabel(Number(nextValue.toFixed(1)));
+    rerender();
+  });
+
   syncOrientationGuard();
   window.addEventListener("resize", syncOrientationGuard);
   window.addEventListener("orientationchange", syncOrientationGuard);
   tryLockLandscape();
 
+  normalizeThresholdInput();
   rerender();
 }
 

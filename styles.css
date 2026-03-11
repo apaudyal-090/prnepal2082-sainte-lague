@@ -147,6 +147,32 @@ h1 {
   background: var(--paper-strong);
 }
 
+.stepper-input {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.stepper-input input {
+  text-align: center;
+}
+
+.stepper-btn {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper-strong);
+  color: var(--ink);
+  font: inherit;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.stepper-btn:hover {
+  background: #f6efe3;
+}
+
 .method-copy p {
   margin: 0;
   color: var(--muted);
@@ -633,6 +659,10 @@ details summary::-webkit-details-marker {
   .summary-grid {
     gap: 12px;
     margin-bottom: 16px;
+  }
+
+  .stepper-input {
+    grid-template-columns: 40px minmax(0, 1fr) 40px;
   }
 
   .controls,

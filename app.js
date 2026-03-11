@@ -101,6 +101,10 @@ function formatNumber(value, digits = 0) {
   }).format(value);
 }
 
+function formatPercentLabel(value) {
+  return Number.isInteger(value) ? String(value) : String(value);
+}
+
 function minimumVotesToQualify(thresholdVotes) {
   return Number.isInteger(thresholdVotes) ? thresholdVotes : Math.floor(thresholdVotes) + 1;
 }
@@ -207,6 +211,7 @@ function computeAllocation(parties, totalVotes, seatCount, thresholdPercent) {
     .sort((left, right) => right.seats - left.seats || right.votes - left.votes);
 
   return {
+    thresholdPercent,
     thresholdVotes,
     minimumQualifyingVotes,
     eligible,
@@ -220,6 +225,7 @@ function computeAllocation(parties, totalVotes, seatCount, thresholdPercent) {
 
 function renderAllocation(model) {
   const totalVotesEl = document.getElementById("total-votes");
+  const thresholdLabelEl = document.getElementById("threshold-label");
   const thresholdVotesEl = document.getElementById("threshold-votes");
   const qualifyingCountEl = document.getElementById("qualifying-count");
   const eligibleVotesEl = document.getElementById("eligible-votes");
@@ -231,6 +237,7 @@ function renderAllocation(model) {
   const seatDetails = document.getElementById("seat-details");
 
   totalVotesEl.textContent = formatNumber(TOTAL_VOTES);
+  thresholdLabelEl.textContent = `${formatPercentLabel(model.thresholdPercent)}% cutoff`;
   thresholdVotesEl.textContent = `${formatNumber(model.minimumQualifyingVotes)} votes`;
   qualifyingCountEl.textContent = String(model.eligible.length);
   eligibleVotesEl.textContent = formatNumber(model.eligibleVotes);
@@ -238,7 +245,7 @@ function renderAllocation(model) {
   resultNote.textContent =
     `${formatNumber(model.excludedVotes)} votes are excluded before seat allocation.`;
   thresholdExplainer.textContent =
-    `3% of ${formatNumber(TOTAL_VOTES)} is ${formatNumber(model.thresholdVotes, 2)}. ` +
+    `${formatPercentLabel(model.thresholdPercent)}% of ${formatNumber(TOTAL_VOTES)} is ${formatNumber(model.thresholdVotes, 2)}. ` +
     `Because vote counts are whole numbers, a party needs at least ${formatNumber(model.minimumQualifyingVotes)} votes to qualify.`;
 
   const largestSeatCount = model.results.length === 0 ? 0 : Math.max(...model.results.map((item) => item.seats));
